@@ -4,7 +4,7 @@
 
 **Personal technical documentation, built as code.**
 
-DevOps notes, networking, commands and procedures — a static, dependency-free wiki generated with Hugo.
+DevOps notes, networking, commands and procedures, a static, dependency-free wiki generated with Hugo.
 
 [![Hugo](https://img.shields.io/badge/Hugo-Extended%200.146+-FF4088?logo=hugo&logoColor=white)](https://gohugo.io/)
 [![Markdown](https://img.shields.io/badge/Markdown-YAML%20Front%20Matter-000000?logo=markdown&logoColor=white)](https://commonmark.org/)
@@ -36,7 +36,7 @@ DevOps notes, networking, commands and procedures — a static, dependency-free 
 | 📚 **Bookshelf**        | Home page listing every documentation as a book cover                                |
 | 🔎 **Search**           | Client-side full-text search with Fuse.js (`/` shortcut), no backend                 |
 | 📊 **Diagrams as code** | Native rendering of ` ```mermaid ` code blocks                                       |
-| 💬 **Callouts**         | Note, tip, warning and error blocks — Markdown alerts or Hugo shortcode              |
+| 💬 **Callouts**         | Note, tip, warning and error blocks  Markdown alerts or Hugo shortcode              |
 | 🔗 **Wiki links**       | Obsidian-style `[[page]]` internal links with automatic backlinks                    |
 | 🧭 **Table of contents**| Sticky sidebar highlighting the section currently being read                         |
 | 📋 **Code blocks**      | "Copy" button on every code block, plus reading time on each article                 |
@@ -109,7 +109,7 @@ archetypes/              # Templates for new pages (article, section)
 assets/
 ├── css/                 # Stylesheet (theme variables at the top of main.css)
 └── js/                  # Scripts (copy, search, ToC, Mermaid)
-    └── vendor/          #   Bundled libraries — versions & licenses in its README
+    └── vendor/          #   Bundled libraries  versions & licenses in its README
 content/                 # Markdown content (one folder = one documentation)
 layouts/                 # Hugo templates
 scripts/
