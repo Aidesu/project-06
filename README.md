@@ -13,6 +13,8 @@ DevOps notes, networking, commands and procedures, a static, dependency-free wik
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](#-license)
 [![Built with Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
+Live on **[https://wiki.deafiaa.com](https://wiki.deafiaa.com)**.
+
 </div>
 
 ---
