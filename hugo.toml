@@ -1,5 +1,5 @@
 # LittleWiki — configuration Hugo
-baseURL = "https://example.org/"
+baseURL = "https://wiki.deafiaa.com/"
 title = "LittleWiki"
 defaultContentLanguage = "fr"
 enableRobotsTXT = true
