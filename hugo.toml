@@ -8,6 +8,11 @@ capitalizeListTitles = false
 [params]
   description = "Personal documentation - Docs-as-Code."
 
+  # Liens affichés à droite du header (supprimer une ligne pour masquer l'icône)
+  [params.social]
+    github = "https://github.com/Aidesu"
+    website = "https://deafiaa.com/"
+
 [outputs]
   home = ["HTML", "RSS", "JSON"]
 

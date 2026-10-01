@@ -129,9 +129,54 @@ img { max-width: 100%; height: auto; }
 
 .search { position: relative; }
 
-.search--header {
-  width: min(100%, 22rem);
-  margin-left: auto;
+.search--header { flex: 0 1 22rem; min-width: 0; }
+
+/* ---------- Header : actions à droite (recherche + liens) ---------- */
+
+.header-actions {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  min-width: 0;
+  min-height: 2.75rem; /* = hauteur du champ de recherche : header identique sur l'accueil */
+  margin-left: 1rem;
+}
+
+.header-links {
+  display: flex;
+  flex: none;
+  gap: 0.5rem;
+}
+
+.header-link,
+.header-link:hover {
+  display: inline-grid;
+  place-items: center;
+  width: 2.375rem;
+  height: 2.375rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: var(--text-muted);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.header-link:hover,
+.header-link:focus-visible {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--bg-elevated), var(--bg-elevated)) padding-box,
+    var(--accent-gradient) border-box;
+  color: var(--text);
+}
+
+.header-link svg {
+  width: 1.15rem;
+  height: 1.15rem;
 }
 
 .search-input {
@@ -776,6 +821,8 @@ pre.mermaid svg {
 @media (max-width: 48rem) {
   .site-header { gap: 1rem; padding-block: 0.75rem; }
   .search-hint { display: none; }
+  .header-actions { gap: 0.5rem; margin-left: 0.75rem; }
+  .search--header .search-input { padding-right: 0.75rem; }
   .search--hero .search-input { padding-right: 1rem; }
   .bookshelf { grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); gap: 2rem 1.25rem; }
   .list-cover { width: 4.5rem; }
