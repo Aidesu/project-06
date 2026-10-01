@@ -1,0 +1,15 @@
+{{ define "main" }}
+<div class="prose">
+  <header class="list-header">
+    {{ with partialCached "cover-url.html" . .Path }}
+      <img class="list-cover" src="{{ . }}" alt="" width="400" height="600">
+    {{ end }}
+    <div>
+      <h1>{{ .Title }}</h1>
+      {{ with .Description }}<p class="list-desc">{{ . }}</p>{{ end }}
+    </div>
+  </header>
+  {{ partial "wikilinks/render.html" (dict "page" . "content" .Content) }}
+</div>
+{{ partial "page-list.html" .Pages }}
+{{ end }}

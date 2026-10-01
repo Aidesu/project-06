@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="{{ .Language.Lang }}">
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body>
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  {{ partial "header.html" . }}
+  {{- /* Accueil sans barre latérale : l'étagère sert de navigation */}}
+  <div class="layout{{ if .IsHome }} layout--full{{ end }}">
+    {{ if not .IsHome }}{{ partial "sidebar.html" . }}{{ end }}
+    <main class="content" id="main">
+      {{ block "main" . }}{{ end }}
+    </main>
+  </div>
+  {{ partial "footer.html" . }}
+  {{ $js := resources.Get "js/copy-code.js" | minify | fingerprint }}
+  <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
+  {{ $search := resources.Get "js/search.js" | minify | fingerprint }}
+  <script src="{{ $search.RelPermalink }}" integrity="{{ $search.Data.Integrity }}"></script>
+  {{- /* Mermaid (~5 Mo) chargé uniquement sur les pages contenant un bloc ```mermaid */}}
+  {{ if .Store.Get "hasMermaid" }}
+    {{ $mermaid := resources.Get "js/vendor/mermaid.min.js" | fingerprint }}
+    {{ $mermaidInit := resources.Get "js/mermaid-init.js" | minify | fingerprint }}
+    <script src="{{ $mermaid.RelPermalink }}" integrity="{{ $mermaid.Data.Integrity }}" defer></script>
+    <script src="{{ $mermaidInit.RelPermalink }}" integrity="{{ $mermaidInit.Data.Integrity }}" defer></script>
+  {{ end }}
+</body>
+</html>

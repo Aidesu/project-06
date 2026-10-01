@@ -1,0 +1,13 @@
+<ul class="page-list">
+  {{ range . }}
+    <li>
+      <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+      <span class="meta">
+        {{ if not .Date.IsZero }}<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_medium" }}</time> · {{ end }}{{ .ReadingTime }} min
+      </span>
+      {{ with .Description }}<p>{{ . }}</p>{{ end }}
+    </li>
+  {{ else }}
+    <li class="meta">Aucune page pour le moment.</li>
+  {{ end }}
+</ul>

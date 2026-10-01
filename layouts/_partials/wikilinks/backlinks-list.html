@@ -1,0 +1,10 @@
+{{- with index (partialCached "wikilinks/backlinks.html" site) .Path -}}
+<section class="backlinks" aria-labelledby="backlinks-title">
+  <p class="backlinks-title" id="backlinks-title">Pages qui mentionnent celle-ci</p>
+  <ul>
+    {{- range sort (uniq .) "Title" }}
+      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+    {{- end }}
+  </ul>
+</section>
+{{- end -}}

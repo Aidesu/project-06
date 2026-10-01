@@ -1,0 +1,17 @@
+{{- /*
+  URL de la couverture d'une section (`cover` du Front Matter, chemin depuis static/ ou URL http).
+  Retourne "" si absente ; avertit si le fichier indiqué n'existe pas (couverture dégradée par défaut).
+*/ -}}
+{{- $url := "" -}}
+{{- with .Params.cover -}}
+  {{- if strings.HasPrefix . "http" -}}
+    {{- $url = . -}}
+  {{- else if fileExists (path.Join "static" .) -}}
+    {{- /* ?v=<empreinte> : le navigateur recharge l'image dès que le fichier change */ -}}
+    {{- $hash := os.ReadFile (path.Join "static" .) | md5 | truncate 8 "" -}}
+    {{- $url = printf "%s?v=%s" (relURL .) $hash -}}
+  {{- else -}}
+    {{- warnf "%s : couverture introuvable static/%s" $.File.Path . -}}
+  {{- end -}}
+{{- end -}}
+{{- return $url -}}

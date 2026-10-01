@@ -1,0 +1,4 @@
+{{- /* Trouve la page visée par un nom de lien. Appel : dict "keys" <table> "name" <nom>. Retourne la page ou "". */ -}}
+{{- $key := lower (strings.TrimSuffix ".md" (strings.TrimPrefix "/" .name)) -}}
+{{- $page := index .keys $key | default "" -}}
+{{- return $page -}}

@@ -1,0 +1,34 @@
+{{ define "main" }}
+{{- /* ToC affichée dès 2 titres (h2–h3, cf. markup.tableOfContents) ; désactivable via `toc: false` */ -}}
+{{- $toc := and (ne .Params.toc false) (ge (len .Fragments.Identifiers) 2) -}}
+<article class="article{{ if $toc }} has-toc{{ end }}">
+  <header class="article-header">
+    <h1>{{ .Title }}</h1>
+    <p class="meta">
+      {{ if not .Date.IsZero }}
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time> ·
+      {{ end }}
+      {{ .ReadingTime }} min de lecture
+    </p>
+    {{ with .GetTerms "tags" }}
+      <ul class="tags">
+        {{ range . }}<li><a href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a></li>{{ end }}
+      </ul>
+    {{ end }}
+  </header>
+  {{ if $toc }}
+    <aside class="toc" aria-label="Sur cette page">
+      <p class="toc-title">Sur cette page</p>
+      {{ .TableOfContents }}
+    </aside>
+  {{ end }}
+  <div class="prose">
+    {{ partial "wikilinks/render.html" (dict "page" . "content" .Content) }}
+    {{ partial "wikilinks/backlinks-list.html" . }}
+  </div>
+</article>
+{{ if $toc }}
+  {{ $tocJs := resources.Get "js/toc.js" | minify | fingerprint }}
+  <script src="{{ $tocJs.RelPermalink }}" integrity="{{ $tocJs.Data.Integrity }}" defer></script>
+{{ end }}
+{{ end }}

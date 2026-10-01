@@ -1,0 +1,29 @@
+# Instructions et réglages locaux de Claude Code — ne jamais publier
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+
+# Site généré par Hugo (reconstruit à chaque build)
+/public/
+
+# Cache Hugo (images et assets traités, régénérés automatiquement)
+/resources/_gen/
+.hugo_build.lock
+hugo_stats.json
+
+# Hugo téléchargé par scripts/build.sh --install
+/.cache/
+
+# Systèmes d'exploitation
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Éditeurs
+.idea/
+*.swp
+*~
+
+# Variables locales / secrets
+.env
+.env.*

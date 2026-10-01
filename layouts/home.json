@@ -1,0 +1,13 @@
+{{- /* Index de recherche consommé par assets/js/search.js */ -}}
+{{- $index := slice -}}
+{{- range where site.Pages "Kind" "in" (slice "page" "section") -}}
+  {{- $index = $index | append (dict
+    "title" .Title
+    "url" .RelPermalink
+    "section" .CurrentSection.LinkTitle
+    "tags" (.Params.tags | default slice)
+    "description" .Description
+    "content" (.Plain | htmlUnescape | strings.TrimSpace)
+  ) -}}
+{{- end -}}
+{{- $index | jsonify -}}

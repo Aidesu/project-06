@@ -1,0 +1,11 @@
+{{- /*
+  Découpe l'intérieur d'un lien "page#section|libellé" (sans les crochets).
+  Retourne : dict "name" "anchor" "label"
+*/ -}}
+{{- $parts := split . "|" -}}
+{{- $label := "" -}}
+{{- if gt (len $parts) 1 }}{{ $label = trim (delimit (after 1 $parts) "|") " " }}{{ end -}}
+{{- $target := split (index $parts 0) "#" -}}
+{{- $anchor := "" -}}
+{{- if gt (len $target) 1 }}{{ $anchor = trim (delimit (after 1 $target) "#") " " }}{{ end -}}
+{{- return dict "name" (trim (index $target 0) " ") "anchor" $anchor "label" $label -}}

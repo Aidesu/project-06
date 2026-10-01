@@ -1,0 +1,49 @@
+{{- /*
+  Remplace les liens [[page]], [[page|libellé]], [[page#section]], [[#section]] dans le HTML rendu.
+  Le contenu des <pre> et <code> est protégé (exemples de syntaxe, schémas Mermaid…).
+  Appel : partial "wikilinks/render.html" (dict "page" . "content" .Content)
+*/ -}}
+{{- $page := .page -}}
+{{- $html := string .content -}}
+{{- if strings.Contains $html "[[" -}}
+  {{- $keys := partialCached "wikilinks/keys.html" site -}}
+
+  {{- /* 1. Mise de côté du code */ -}}
+  {{- $codes := findRE `(?s)<pre[\s>].*?</pre>|<code[\s>].*?</code>` $html -}}
+  {{- range $i, $c := $codes -}}
+    {{- $html = replace $html $c (printf "@@WIKILINK-CODE-%d@@" $i) -}}
+  {{- end -}}
+
+  {{- /* 2. Remplacement des liens */ -}}
+  {{- range uniq (findRE `\[\[[^\[\]\n]+\]\]` $html) -}}
+    {{- $match := . -}}
+    {{- $link := partial "wikilinks/parse.html" (htmlUnescape (substr $match 2 -2)) -}}
+    {{- $target := $page -}}
+    {{- with $link.name }}{{ $target = partial "wikilinks/resolve.html" (dict "keys" $keys "name" .) }}{{ end -}}
+
+    {{- $out := "" -}}
+    {{- if $target -}}
+      {{- $href := cond ($page.Eq $target) "" $target.RelPermalink -}}
+      {{- with $link.anchor }}{{ $href = printf "%s#%s" $href (anchorize .) }}{{ end -}}
+
+      {{- $text := $link.label -}}
+      {{- if not $text -}}
+        {{- if $link.name }}{{ $text = $target.LinkTitle }}{{ end -}}
+        {{- with $link.anchor }}{{ $text = cond (eq $text "") . (printf "%s › %s" $text .) }}{{ end -}}
+        {{- if not $text }}{{ $text = $target.LinkTitle }}{{ end -}}
+      {{- end -}}
+      {{- $out = printf `<a class="wikilink" href="%s">%s</a>` $href (htmlEscape $text) -}}
+    {{- else -}}
+      {{- warnf "%s : lien [[%s]] introuvable" $page.File.Path $link.name -}}
+      {{- $out = printf `<span class="wikilink wikilink-broken" title="Page introuvable : %s">%s</span>`
+            (htmlEscape $link.name) (htmlEscape ($link.label | default $link.name)) -}}
+    {{- end -}}
+    {{- $html = replace $html $match $out -}}
+  {{- end -}}
+
+  {{- /* 3. Restauration du code */ -}}
+  {{- range $i, $c := $codes -}}
+    {{- $html = replace $html (printf "@@WIKILINK-CODE-%d@@" $i) $c -}}
+  {{- end -}}
+{{- end -}}
+{{- $html | safeHTML -}}

@@ -1,0 +1,6 @@
+{{- /* Alertes Markdown (> [!NOTE], > [!WARNING] Titre…) rendues en callouts ; citations classiques inchangées. */ -}}
+{{- if eq .Type "alert" -}}
+  {{- partial "callout.html" (dict "type" .AlertType "title" .AlertTitle "content" .Text) -}}
+{{- else -}}
+  <blockquote>{{ .Text }}</blockquote>
+{{- end -}}

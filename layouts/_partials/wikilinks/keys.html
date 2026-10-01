@@ -1,0 +1,16 @@
+{{- /*
+  Table de résolution des [[liens]] : clé (minuscules) → page.
+  Clés : titre, nom de fichier, chemin (ex. "guides/hugo-aide-memoire").
+  Ordre d'insertion = priorité croissante : chemin > nom de fichier > titre.
+  Appel : partialCached "wikilinks/keys.html" site
+*/ -}}
+{{- $s := newScratch -}}
+{{- $s.Set "keys" dict -}}
+{{- range where site.Pages "Kind" "in" (slice "page" "section") -}}
+  {{- if .File -}}
+    {{- $s.SetInMap "keys" (lower .Title) . -}}
+    {{- $s.SetInMap "keys" (lower .File.ContentBaseName) . -}}
+    {{- $s.SetInMap "keys" (lower (strings.TrimPrefix "/" .Path)) . -}}
+  {{- end -}}
+{{- end -}}
+{{- return $s.Get "keys" -}}

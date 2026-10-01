@@ -1,0 +1,5 @@
+<header class="site-header">
+  <a class="brand" href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a>
+  {{- /* Sur l'accueil, la recherche est dans le hero */}}
+  {{ if not .IsHome }}{{ partial "search.html" (dict "variant" "header") }}{{ end }}
+</header>

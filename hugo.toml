@@ -1,0 +1,33 @@
+# LittleWiki — configuration Hugo
+baseURL = "https://example.org/"
+title = "LittleWiki"
+defaultContentLanguage = "fr"
+enableRobotsTXT = true
+capitalizeListTitles = false
+
+[params]
+  description = "Personal documentation - Docs-as-Code."
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = false
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = false
+    noClasses = true
+    style = "github-dark"
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 3
+
+[module]
+  [module.hugoVersion]
+    extended = true
+    min = "0.146.0"

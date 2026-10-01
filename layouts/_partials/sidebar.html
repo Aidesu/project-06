@@ -1,0 +1,21 @@
+{{ $current := . }}
+<nav class="sidebar" aria-label="Navigation du wiki">
+  {{ with site.Home.RegularPages.ByTitle }}
+    <p class="sidebar-title">Pages</p>
+    <ul>
+      {{ range . }}
+        <li><a href="{{ .RelPermalink }}"{{ if $current.Eq . }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a></li>
+      {{ end }}
+    </ul>
+  {{ end }}
+  {{ range site.Home.Sections.ByWeight }}
+    <p class="sidebar-title"><a href="{{ .RelPermalink }}"{{ if $current.Eq . }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a></p>
+    {{ with .RegularPages.ByTitle }}
+      <ul>
+        {{ range . }}
+          <li><a href="{{ .RelPermalink }}"{{ if $current.Eq . }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a></li>
+        {{ end }}
+      </ul>
+    {{ end }}
+  {{ end }}
+</nav>

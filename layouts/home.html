@@ -1,0 +1,18 @@
+{{ define "main" }}
+<div class="home">
+  <section class="home-hero">
+    <h1>{{ .Title }}</h1>
+    {{- with .Content }}
+      <div class="home-intro">{{ partial "wikilinks/render.html" (dict "page" $ "content" .) }}</div>
+    {{- end }}
+    {{ partial "search.html" (dict "variant" "hero") }}
+  </section>
+
+  <h2 class="visually-hidden">Documentations</h2>
+  <ul class="bookshelf">
+    {{ range site.Sections.ByWeight }}
+      <li>{{ partial "book.html" . }}</li>
+    {{ end }}
+  </ul>
+</div>
+{{ end }}

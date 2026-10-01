@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" width="400" height="600">
+  <defs>
+    <linearGradient id="accent" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="400" y2="600">
+      <stop offset="0" stop-color="#F2709C"/>
+      <stop offset="1" stop-color="#00FFFF"/>
+    </linearGradient>
+    <linearGradient id="icon" gradientUnits="userSpaceOnUse" x1="100" y1="140" x2="300" y2="320">
+      <stop offset="0" stop-color="#F2709C"/>
+      <stop offset="1" stop-color="#00FFFF"/>
+    </linearGradient>
+    <radialGradient id="glow-pink" cx="0.2" cy="0.15" r="0.7">
+      <stop offset="0" stop-color="#F2709C" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#F2709C" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow-cyan" cx="0.9" cy="0.6" r="0.6">
+      <stop offset="0" stop-color="#00FFFF" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#00FFFF" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.2" fill="#ffffff" fill-opacity="0.06"/>
+    </pattern>
+  </defs>
+  <rect width="400" height="600" fill="#121821"/>
+  <rect width="400" height="600" fill="url(#dots)"/>
+  <rect width="400" height="600" fill="url(#glow-pink)"/>
+  <rect width="400" height="600" fill="url(#glow-cyan)"/>
+  <rect x="18" y="18" width="364" height="564" rx="6" fill="none" stroke="url(#accent)" stroke-width="2" stroke-opacity="0.45"/>
+  <g fill="none" stroke="url(#icon)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M236.4 246.0 L200.0 267.0 L163.6 246.0 L163.6 204.0 L200.0 183.0 L236.4 204.0 Z"/><path d="M200.0 177.0 L200.0 141.0"/><circle cx="200.0" cy="125.0" r="16"/><path d="M241.6 201.0 L272.7 183.0"/><circle cx="286.6" cy="175.0" r="16"/><path d="M241.6 249.0 L272.7 267.0"/><circle cx="286.6" cy="275.0" r="16"/><path d="M200.0 273.0 L200.0 309.0"/><circle cx="200.0" cy="325.0" r="16"/><path d="M158.4 249.0 L127.3 267.0"/><circle cx="113.4" cy="275.0" r="16"/><path d="M158.4 201.0 L127.3 183.0"/><circle cx="113.4" cy="175.0" r="16"/>
+  </g>
+</svg>

@@ -1,0 +1,19 @@
+{{- /*
+  Callout partagé par le shortcode {{< callout >}} et la syntaxe Markdown > [!NOTE].
+  Paramètres (dict) : type, title (optionnel), content (HTML déjà rendu).
+*/ -}}
+{{- $aliases := dict "info" "note" "important" "warning" "hint" "tip" "caution" "error" "danger" "error" -}}
+{{- $labels := dict "note" "Note" "tip" "Astuce" "warning" "Attention" "error" "Erreur" -}}
+{{- $type := lower (.type | default "note") -}}
+{{- with index $aliases $type }}{{ $type = . }}{{ end -}}
+{{- if not (index $labels $type) -}}
+  {{- warnf "callout : type inconnu %q, remplacé par « note » (types : note, tip, warning, error)" $type -}}
+  {{- $type = "note" -}}
+{{- end -}}
+<div class="callout callout-{{ $type }}" role="note">
+  <p class="callout-title">
+    {{- partial "callout-icon.html" $type -}}
+    <span>{{ .title | default (index $labels $type) }}</span>
+  </p>
+  <div class="callout-body">{{ .content }}</div>
+</div>

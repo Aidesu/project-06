@@ -1,0 +1,24 @@
+{{- /*
+  Graphe des rétroliens, calculé une seule fois depuis le Markdown brut : .Path de la cible → pages sources.
+  Les blocs de code (``` et ~~~) et le code en ligne sont ignorés.
+  Appel : partialCached "wikilinks/backlinks.html" site
+*/ -}}
+{{- $keys := partialCached "wikilinks/keys.html" site -}}
+{{- $s := newScratch -}}
+{{- range where site.Pages "Kind" "in" (slice "page" "section") -}}
+  {{- $src := . -}}
+  {{- $raw := .RawContent -}}
+  {{- $raw = replaceRE "(?ms)^[ \t]*````.*?^[ \t]*````" "" $raw -}}
+  {{- $raw = replaceRE "(?ms)^[ \t]*```.*?^[ \t]*```" "" $raw -}}
+  {{- $raw = replaceRE "(?ms)^[ \t]*~~~.*?^[ \t]*~~~" "" $raw -}}
+  {{- $raw = replaceRE "`[^`\n]*`" "" $raw -}}
+  {{- range findRE `\[\[[^\[\]\n]+\]\]` $raw -}}
+    {{- $link := partial "wikilinks/parse.html" (substr . 2 -2) -}}
+    {{- with $link.name -}}
+      {{- with partial "wikilinks/resolve.html" (dict "keys" $keys "name" .) -}}
+        {{- if not ($src.Eq .) }}{{ $s.Add .Path (slice $src) }}{{ end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $s.Values -}}

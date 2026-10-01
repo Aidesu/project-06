@@ -1,0 +1,14 @@
+{{- /* Appel : partial "search.html" (dict "variant" "header" | "hero") — une seule instance par page. */ -}}
+{{- $variant := .variant | default "header" -}}
+{{- $fuse := resources.Get "js/vendor/fuse.esm.min.js" | fingerprint -}}
+{{- with site.Home.OutputFormats.Get "json" -}}
+<div class="search search--{{ $variant }}" role="search" data-index="{{ .RelPermalink }}" data-fuse="{{ $fuse.RelPermalink }}" hidden>
+  <label class="visually-hidden" for="search-input">Rechercher dans le wiki</label>
+  <input id="search-input" class="search-input" type="search"
+    placeholder="{{ if eq $variant "hero" }}Rechercher dans la documentation…{{ else }}Rechercher…{{ end }}"
+    autocomplete="off" spellcheck="false"
+    role="combobox" aria-expanded="false" aria-controls="search-results" aria-autocomplete="list">
+  <kbd class="search-hint" aria-hidden="true">/</kbd>
+  <ul id="search-results" class="search-results" role="listbox" aria-label="Résultats de recherche" hidden></ul>
+</div>
+{{- end -}}

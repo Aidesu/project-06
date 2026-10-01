@@ -1,0 +1,13 @@
+{{- /* Couverture de livre d'une section. Image : `cover` dans le Front Matter du _index.md (chemin dans static/, vérifié par cover-url.html). */ -}}
+{{- $count := len .RegularPagesRecursive -}}
+<a class="book" href="{{ .RelPermalink }}"{{ with .Description }} title="{{ . }}"{{ end }}>
+  <span class="book-cover">
+    {{- with partialCached "cover-url.html" . .Path }}
+      <img src="{{ . }}" alt="" width="400" height="600" decoding="async">
+    {{- end }}
+    <span class="book-title">{{ .LinkTitle }}</span>
+  </span>
+  <span class="book-meta">
+    {{- if $count }}{{ $count }} article{{ if gt $count 1 }}s{{ end }}{{ else }}Aucun article{{ end -}}
+  </span>
+</a>
