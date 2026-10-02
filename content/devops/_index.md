@@ -1,5 +1,5 @@
 ---
-title: "DEVOPS"
+title: "DevOps"
 date: 2026-10-01
 draft: false
 description: "Create SSH connection"
