@@ -10,17 +10,17 @@ categories: []
 
 RIP (Routing Information Protocole)
 
-```markdown
+```markdown {copy=true}
 router rip
 version 2
 no auto-summary
 ```
 
-```markdown
+```markdown {copy=true}
 network 10.0.200.0
 ```
 
-```markdown
+```markdown {copy=true}
 redistribute static
 default-information originate
 ```

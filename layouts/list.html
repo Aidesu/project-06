@@ -11,5 +11,13 @@
   </header>
   {{ partial "wikilinks/render.html" (dict "page" . "content" .Content) }}
 </div>
-{{ partial "page-list.html" .Pages }}
+{{- /* Tags/catégories : masquer les pages des sections du footer, puis les termes devenus vides */ -}}
+{{ $pages := .Pages }}
+{{ if eq .Kind "term" }}
+  {{ $pages = partial "visible-pages.html" .Pages }}
+{{ else if eq .Kind "taxonomy" }}
+  {{ $pages = slice }}
+  {{ range $term := .Pages }}{{ with partial "visible-pages.html" $term.Pages }}{{ $pages = $pages | append $term }}{{ end }}{{ end }}
+{{ end }}
+{{ partial "page-list.html" $pages }}
 {{ end }}

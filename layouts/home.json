@@ -1,6 +1,8 @@
 {{- /* Index de recherche consommé par assets/js/search.js */ -}}
 {{- $index := slice -}}
 {{- range where site.Pages "Kind" "in" (slice "page" "section") -}}
+  {{- if .CurrentSection.Params.footer }}{{ continue }}{{ end -}}
+  {{- if and (eq .Kind "section") (not .RegularPagesRecursive) }}{{ continue }}{{ end -}}
   {{- $index = $index | append (dict
     "title" .Title
     "url" .RelPermalink

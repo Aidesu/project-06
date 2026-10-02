@@ -9,6 +9,8 @@
     </ul>
   {{ end }}
   {{ range site.Home.Sections.ByWeight }}
+    {{- /* Masquées : sections du footer (sauf si on y est) et sections sans article */}}
+    {{ if or (and (not .Params.footer) .RegularPagesRecursive) ($current.IsDescendant .) ($current.Eq .) }}
     <p class="sidebar-title"><a href="{{ .RelPermalink }}"{{ if $current.Eq . }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a></p>
     {{ with .RegularPages.ByTitle }}
       <ul>
@@ -16,6 +18,7 @@
           <li><a href="{{ .RelPermalink }}"{{ if $current.Eq . }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a></li>
         {{ end }}
       </ul>
+    {{ end }}
     {{ end }}
   {{ end }}
 </nav>

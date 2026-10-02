@@ -10,11 +10,11 @@ categories: []
 
 SVI (Switched Virtual Interface)
 
-```markdown
+```markdown {copy=true}
 interface vlan 99
 ```
 
-```markdown
+```markdown {copy=true}
 ip address 10.0.99.5 255.255.255.0
 exit
 ip default-gateway 10.0.99.1

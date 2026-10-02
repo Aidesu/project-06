@@ -1,0 +1,198 @@
+{{- /*
+  Éditeur Markdown (Front Matter + aperçu en direct + export .md). Activé par `layout: editor`.
+  Tout se passe dans le navigateur : rien n'est envoyé, le brouillon reste en localStorage.
+*/ -}}
+{{ define "main" }}
+{{- /* Sections proposées à l'export (chemin content/<section>/) */ -}}
+{{- $sections := slice -}}
+{{- range site.Sections.ByWeight -}}
+  {{- $sections = $sections | append (dict "name" .Section "title" .LinkTitle "footer" (.Params.footer | default false)) -}}
+{{- end -}}
+{{- /* Pages connues : résolution des [[liens]] dans l'aperçu (mêmes clés que wikilinks/keys.html) */ -}}
+{{- $pages := slice -}}
+{{- range where site.Pages "Kind" "in" (slice "page" "section") -}}
+  {{- if and .File (not .IsHome) (ne .Layout "editor") -}}
+    {{- $pages = $pages | append (dict
+      "title" .LinkTitle
+      "file" .File.ContentBaseName
+      "path" (strings.TrimPrefix "/" .Path)
+      "section" .Section
+      "url" .RelPermalink
+    ) -}}
+  {{- end -}}
+{{- end -}}
+{{- $marked := resources.Get "js/vendor/marked.esm.js" | fingerprint -}}
+
+<div class="editor" data-marked="{{ $marked.RelPermalink }}">
+  <script type="application/json" id="editor-data">{{ dict "sections" $sections "pages" $pages | jsonify | safeJS }}</script>
+  {{- /* Icônes des callouts, clonées par l'aperçu (même rendu que callout.html) */}}
+  {{- range slice "note" "tip" "warning" "error" }}
+  <template data-callout-icon="{{ . }}">{{ partial "callout-icon.html" . }}</template>
+  {{- end }}
+
+  <header class="editor-head">
+    <div>
+      {{- /* Retour à la page précédente du wiki (editor.js), sinon à l'accueil */}}
+      <a class="editor-back" href="{{ site.Home.RelPermalink }}" data-action="back" title="Le brouillon reste enregistré">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Retour au wiki
+      </a>
+      <h1>{{ .Title }}</h1>
+      <p class="editor-status" role="status" aria-live="polite">Brouillon enregistré automatiquement dans ce navigateur.</p>
+    </div>
+    <div class="editor-actions">
+      <label class="btn btn-ghost" title="Ouvrir un fichier .md existant">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M12 4v12M7 9l5-5 5 5"/></svg>
+        Ouvrir
+        <input class="visually-hidden" type="file" accept=".md,.markdown,text/markdown" data-action="open">
+      </label>
+      <button class="btn btn-ghost" type="button" data-action="new" title="Repartir d'une page blanche">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Nouveau
+      </button>
+      <button class="btn btn-ghost" type="button" data-action="copy" title="Copier le fichier complet (Front Matter inclus)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
+        Copier
+      </button>
+      <button class="btn btn-primary" type="button" data-action="download" title="Télécharger le fichier .md (Ctrl+S)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5M4 20h16"/></svg>
+        Télécharger .md
+      </button>
+    </div>
+  </header>
+
+  <noscript><p class="callout callout-warning">L'éditeur nécessite JavaScript.</p></noscript>
+
+  <div class="editor-bar">
+    <div class="editor-toolbar" role="toolbar" aria-label="Mise en forme" aria-controls="ed-body">
+      <div class="tool-group">
+        <button type="button" data-cmd="h2" title="Titre de section (h2)">H2</button>
+        <button type="button" data-cmd="h3" title="Sous-titre (h3)">H3</button>
+      </div>
+      <div class="tool-group">
+        <button type="button" data-cmd="bold" title="Gras (Ctrl+B)" aria-label="Gras"><b>B</b></button>
+        <button type="button" data-cmd="italic" title="Italique (Ctrl+I)" aria-label="Italique"><i>I</i></button>
+        <button type="button" data-cmd="code" title="Code en ligne (Ctrl+E)" aria-label="Code en ligne">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg>
+        </button>
+      </div>
+      <div class="tool-group">
+        <button type="button" data-cmd="command" title="Bloc de commandes avec bouton Copier" aria-label="Bloc de commandes">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg>
+        </button>
+        <button type="button" data-cmd="codeblock" title="Bloc de code (exemple, sans bouton Copier)" aria-label="Bloc de code">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H6a2 2 0 0 0-2 2v4l-2 2 2 2v4a2 2 0 0 0 2 2h2M16 4h2a2 2 0 0 1 2 2v4l2 2-2 2v4a2 2 0 0 1-2 2h-2"/></svg>
+        </button>
+      </div>
+      <div class="tool-group">
+        <button type="button" data-cmd="link" title="Lien (Ctrl+K)" aria-label="Lien">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+        </button>
+        <button type="button" data-cmd="wikilink" title="Lien vers une page du wiki [[…]]" aria-label="Lien wiki">[[ ]]</button>
+      </div>
+      <div class="tool-group">
+        <button type="button" data-cmd="ul" title="Liste à puces" aria-label="Liste à puces">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg>
+        </button>
+        <button type="button" data-cmd="ol" title="Liste numérotée" aria-label="Liste numérotée">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6h10M10 12h10M10 18h10M4 4v4M3 18h3l-3 2h3"/></svg>
+        </button>
+        <button type="button" data-cmd="table" title="Tableau" aria-label="Tableau">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M10 4v16"/></svg>
+        </button>
+        <button type="button" data-cmd="hr" title="Séparateur" aria-label="Séparateur">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18"/></svg>
+        </button>
+      </div>
+      <details class="tool-menu">
+        <summary title="Encadré (Note, Astuce, Attention, Erreur)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+          Callout
+        </summary>
+        <div class="tool-menu-list">
+          <button type="button" data-cmd="callout" data-type="NOTE" class="callout-note">Note</button>
+          <button type="button" data-cmd="callout" data-type="TIP" class="callout-tip">Astuce</button>
+          <button type="button" data-cmd="callout" data-type="WARNING" class="callout-warning">Attention</button>
+          <button type="button" data-cmd="callout" data-type="CAUTION" class="callout-error">Erreur</button>
+        </div>
+      </details>
+    </div>
+
+    <div class="view-switch" role="radiogroup" aria-label="Affichage">
+      <label><input type="radio" name="view" value="write"><span>Écrire</span></label>
+      <label><input type="radio" name="view" value="split"><span>Côte à côte</span></label>
+      <label><input type="radio" name="view" value="preview"><span>Aperçu</span></label>
+    </div>
+  </div>
+
+  <div class="editor-panes" data-view="split">
+    <div class="editor-pane editor-pane--write">
+      <label class="visually-hidden" for="ed-body">Contenu Markdown</label>
+      <textarea id="ed-body" spellcheck="true" placeholder="## Première section
+
+Écris ici en Markdown. Quelques raccourcis :
+- [[ pour lier une page du wiki (suggestions automatiques)
+- Entrée dans une liste continue la liste
+- Ctrl+B gras · Ctrl+I italique · Ctrl+K lien · Ctrl+S télécharger"></textarea>
+      <ul class="wiki-suggest" id="wiki-suggest" role="listbox" aria-label="Pages du wiki" hidden></ul>
+    </div>
+    <div class="editor-pane editor-pane--preview" aria-label="Aperçu">
+      <article class="article editor-preview">
+        <header class="article-header">
+          <h1 data-preview="title">Sans titre</h1>
+          <p class="meta" data-preview="meta"></p>
+          <ul class="tags" data-preview="tags"></ul>
+        </header>
+        <div class="prose" data-preview="body"><p class="meta">Chargement de l'aperçu…</p></div>
+      </article>
+    </div>
+  </div>
+
+  <p class="editor-foot">
+    <span data-stat="words">0 mot</span> · <span data-stat="reading">1 min de lecture</span>
+    <span class="editor-foot-hint">Le fichier exporté est prêt à déposer dans <code data-stat="path">content/</code></span>
+  </p>
+
+  <details class="editor-meta">
+    <summary>Informations de l'article <span class="editor-meta-hint">Front Matter</span></summary>
+    <div class="editor-fields">
+      <div class="field field-wide">
+        <label for="ed-title">Titre <span class="req" aria-hidden="true">*</span></label>
+        <input id="ed-title" name="title" type="text" required autocomplete="off" placeholder="Ex : Configurer OSPF">
+        <p class="field-error" id="ed-title-error" hidden>Le titre est obligatoire pour exporter.</p>
+      </div>
+      <div class="field">
+        <label for="ed-section">Section</label>
+        <select id="ed-section" name="section"></select>
+      </div>
+      <div class="field">
+        <label for="ed-slug">Nom du fichier</label>
+        <div class="input-affix">
+          <input id="ed-slug" name="slug" type="text" autocomplete="off" spellcheck="false" placeholder="configurer-ospf" aria-describedby="ed-path">
+          <span aria-hidden="true">.md</span>
+        </div>
+        <p class="field-help" id="ed-path"></p>
+      </div>
+      <div class="field">
+        <label for="ed-date">Date</label>
+        <input id="ed-date" name="date" type="datetime-local" step="60">
+      </div>
+      <div class="field field-wide">
+        <label for="ed-description">Description <span class="optional">facultatif</span></label>
+        <input id="ed-description" name="description" type="text" autocomplete="off" placeholder="Une phrase qui résume la page (affichée dans les listes et la recherche)">
+      </div>
+      <div class="field">
+        <label for="ed-tags">Tags <span class="optional">séparés par des virgules</span></label>
+        <input id="ed-tags" name="tags" type="text" autocomplete="off" placeholder="cisco, réseau">
+      </div>
+      <div class="field">
+        <label for="ed-categories">Catégories <span class="optional">séparées par des virgules</span></label>
+        <input id="ed-categories" name="categories" type="text" autocomplete="off" placeholder="aide-mémoire">
+      </div>
+    </div>
+  </details>
+</div>
+
+{{ $js := resources.Get "js/editor.js" | minify | fingerprint }}
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+{{ end }}

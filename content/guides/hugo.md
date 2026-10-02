@@ -11,7 +11,7 @@ categories: ["outils"]
 
 Lance le site en local avec rechargement automatique :
 
-```bash
+```bash {copy=true}
 hugo server
 ```
 
@@ -21,13 +21,13 @@ Le site est alors disponible sur `http://localhost:1313/`.
 
 L'archétype `archetypes/default.md` pré-remplit le Front Matter :
 
-```bash
+```bash {copy=true}
 hugo new content guides/ma-nouvelle-page.md
 ```
 
 ## Générer le site
 
-```bash
+```bash {copy=true}
 hugo --minify
 ```
 

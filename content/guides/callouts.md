@@ -44,7 +44,7 @@ Contenu **Markdown**.
 {{< callout type="tip" title="Commande utile" >}}
 Prévisualiser aussi les brouillons :
 
-```bash
+```bash {copy=true}
 hugo server --buildDrafts
 ```
 {{< /callout >}}

@@ -10,22 +10,22 @@ categories: []
 
 SSH (Secure Shell)
 
-```markdown
+```markdown {copy=true}
 hostname [name]
 ```
 
-```markdown
+```markdown {copy=true}
 username [username] secret [pwd]
 ```
 
-```markdown
+```markdown {copy=true}
 ip domain-name [domain]
 ```
-```markdown
+```markdown {copy=true}
 crypto key generate rsa general-keys modulus 1024
 ip ssh version 2
 ```
-```markdown
+```markdown {copy=true}
 line vty 0 15
 login local
 transport input

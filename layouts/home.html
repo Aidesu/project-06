@@ -10,8 +10,10 @@
 
   <h2 class="visually-hidden">Documentations</h2>
   <ul class="bookshelf">
-    {{ range site.Sections.ByWeight }}
-      <li>{{ partial "book.html" . }}</li>
+    {{- /* --i : rang du livre, pour l'apparition en cascade (main.css) */}}
+    {{ $i := 0 }}
+    {{ range where site.Sections.ByWeight "Params.footer" "!=" true }}
+      {{ if .RegularPagesRecursive }}<li style="--i: {{ $i }}">{{ partial "book.html" . }}</li>{{ $i = add $i 1 }}{{ end }}
     {{ end }}
   </ul>
 </div>

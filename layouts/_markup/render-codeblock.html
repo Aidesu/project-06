@@ -1,0 +1,7 @@
+{{- /* Bloc de code : bouton "Copier" uniquement si l'attribut {copy=true} est présent. */ -}}
+{{- $result := transform.HighlightCodeBlock . -}}
+{{- if .Attributes.copy -}}
+<div class="code-block">{{ $result.Wrapped }}</div>
+{{- else -}}
+{{ $result.Wrapped }}
+{{- end -}}

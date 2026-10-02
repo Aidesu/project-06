@@ -1,0 +1,6 @@
+{{- /* Pages listables : exclut celles des sections réservées au footer (front matter `footer: true`, ex : guides) */ -}}
+{{- $pages := slice -}}
+{{- range . -}}
+  {{- if not .CurrentSection.Params.footer }}{{ $pages = $pages | append . }}{{ end -}}
+{{- end -}}
+{{- return $pages -}}

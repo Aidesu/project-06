@@ -6,9 +6,10 @@
 <body>
   <a class="skip-link" href="#main">Aller au contenu</a>
   {{ partial "header.html" . }}
-  {{- /* Accueil sans barre latérale : l'étagère sert de navigation */}}
-  <div class="layout{{ if .IsHome }} layout--full{{ end }}">
-    {{ if not .IsHome }}{{ partial "sidebar.html" . }}{{ end }}
+  {{- /* Sans barre latérale : accueil (l'étagère sert de navigation) et éditeur (pleine largeur) */}}
+  {{- $full := or .IsHome (eq .Layout "editor") }}
+  <div class="layout{{ if $full }} layout--full{{ end }}">
+    {{ if not $full }}{{ partial "sidebar.html" . }}{{ end }}
     <main class="content" id="main">
       {{ block "main" . }}{{ end }}
     </main>

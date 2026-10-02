@@ -5,4 +5,5 @@ draft: false
 description: "Procédures et aide-mémoires pas à pas pour faire vivre ce wiki."
 cover: "images/covers/guides.svg"
 weight: 10
+footer: true # section accessible uniquement depuis le pied de page
 ---
