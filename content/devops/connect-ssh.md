@@ -2,35 +2,62 @@
 title: "Connect SSH"
 date: 2026-10-01T11:03:26+02:00
 draft: false
-tags: []
-categories: []
+description: "Activer l'accès SSH sur un switch ou routeur Cisco : utilisateur local, clés RSA et lignes VTY."
+tags: ["cisco", "ssh", "sécurité", "réseau"]
+categories: ["réseau"]
 ---
 
-## Configuration SSH
+## SSH ?
 
-SSH (Secure Shell)
+SSH (Secure Shell) permet d'administrer un équipement à distance via une connexion chiffrée, contrairement à Telnet.
 
-```markdown {copy=true}
-hostname [name]
+> [!NOTE] Prérequis
+> Le switch doit avoir une IP joignable, voir [[svi|la configuration SVI]].
+
+---
+
+## Configuration
+
+Changer le nom de l'équipement :
+```bash
+hostname [NAME]
 ```
 
-```markdown {copy=true}
-username [username] secret [pwd]
+Créer un utilisateur local :
+```bash
+username [USERNAME] secret [PWD]
 ```
 
-```markdown {copy=true}
-ip domain-name [domain]
+Définir un nom de domaine :
+```bash
+ip domain-name [DOMAIN]
 ```
-```markdown {copy=true}
+
+Générer les clés RSA et forcer SSH v2 :
+```bash
 crypto key generate rsa general-keys modulus 1024
 ip ssh version 2
 ```
-```markdown {copy=true}
+
+> [!TIP]
+> Le `hostname` et le `ip domain-name` sont obligatoires : sans eux, la génération des clés RSA échoue.
+
+Autoriser SSH sur les lignes VTY :
+```bash {copy=true}
 line vty 0 15
 login local
-transport input
+transport input ssh
 ```
 
+> [!WARNING] Mot de passe enable
+> Sans `enable secret [PWD]`, l'accès au mode privilégié est refusé à distance.
 
-> [!NOTE]
-> Creer un mot de passe dans la machine `enable secret [PWD]`
+---
+
+## Vérification
+
+| Commande                    | Affiche                          |
+|-----------------------------|----------------------------------|
+| `show ip ssh`               | Version SSH et état du service   |
+| `show ssh`                  | Sessions SSH ouvertes            |
+| `ssh -l [USERNAME] [IP]`    | Connexion depuis un autre équipement |
