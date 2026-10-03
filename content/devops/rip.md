@@ -16,7 +16,7 @@ RIP (Routing Information Protocol) est un protocole de routage dynamique à vect
 ## Configuration RIP v2
 
 Activer RIP v2 :
-```bash {copy=true}
+```cisco {copy=true}
 router rip
 version 2
 no auto-summary
@@ -26,12 +26,12 @@ no auto-summary
 > `no auto-summary` empêche RIP de résumer les réseaux à leur classe (A, B, C), indispensable avec des sous-réseaux.
 
 Annoncer un réseau directement connecté :
-```bash
+```cisco
 network 10.0.200.0
 ```
 
 Redistribuer les routes statiques et annoncer la route par défaut :
-```bash {copy=true}
+```cisco {copy=true}
 redistribute static
 default-information originate
 ```

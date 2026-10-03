@@ -16,19 +16,19 @@ Une SVI (Switched Virtual Interface) est une interface virtuelle associée à un
 ## Configuration
 
 Créer la SVI du VLAN de management :
-```bash
+```cisco
 interface vlan 99
 ```
 
 Configurer l'IP et activer l'interface :
-```bash
+```cisco
 ip address 10.0.99.5 255.255.255.0
 no shutdown
 exit
 ```
 
 Configurer la gateway :
-```bash
+```cisco
 ip default-gateway 10.0.99.1
 ```
 

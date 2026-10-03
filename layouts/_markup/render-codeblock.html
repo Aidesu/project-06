@@ -1,7 +1,31 @@
 {{- /* Bloc de code : bouton "Copier" uniquement si l'attribut {copy=true} est présent. */ -}}
-{{- $result := transform.HighlightCodeBlock . -}}
-{{- if .Attributes.copy -}}
-<div class="code-block">{{ $result.Wrapped }}</div>
+{{- $html := "" -}}
+{{- if in (slice "cisco" "ios") .Type -}}
+  {{- /* Chroma n'a pas de lexer Cisco IOS : coloration maison au build, sans JS (classes .ios-* dans main.css). */ -}}
+  {{- $lines := slice -}}
+  {{- range split .Inner "\n" -}}
+    {{- $line := . | htmlEscape -}}
+    {{- if findRE `^\s*!` $line -}}
+      {{- $line = printf `<span class="ios-comment">%s</span>` $line -}}
+    {{- else -}}
+      {{- with findRESubmatch `^(\s*)(no\s+)?(\S+)(.*)$` $line 1 -}}
+        {{- $m := index . 0 -}}
+        {{- $rest := index $m 4 -}}
+        {{- $rest = replaceRE `(\[[^\]]+\])` `<span class="ios-var">$1</span>` $rest -}}
+        {{- $rest = replaceRE `\b(\d{1,3}(?:\.\d{1,3}){3})\b` `<span class="ios-ip">$1</span>` $rest -}}
+        {{- $rest = replaceRE `(?i)\b((?:fastethernet|gigabitethernet|fa|gi|f|g|vlan|loopback|lo)\s?\d+(?:/\d+)*(?:-\d+)?)\b` `<span class="ios-if">$1</span>` $rest -}}
+        {{- $no := cond (eq (index $m 2) "") "" (printf `<span class="ios-no">%s</span>` (index $m 2)) -}}
+        {{- $line = printf `%s%s<span class="ios-cmd">%s</span>%s` (index $m 1) $no (index $m 3) $rest -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $lines = $lines | append $line -}}
+  {{- end -}}
+  {{- $html = printf `<div class="highlight"><pre tabindex="0"><code class="language-%s" data-lang="%s">%s</code></pre></div>` .Type .Type (delimit $lines "\n") -}}
 {{- else -}}
-{{ $result.Wrapped }}
+  {{- $html = (transform.HighlightCodeBlock .).Wrapped -}}
+{{- end -}}
+{{- if .Attributes.copy -}}
+<div class="code-block">{{ $html | safeHTML }}</div>
+{{- else -}}
+{{ $html | safeHTML }}
 {{- end -}}

@@ -656,6 +656,14 @@ pre code {
   font-size: inherit;
 }
 
+/* Coloration Cisco IOS (blocs ```cisco, cf. render-codeblock.html) */
+.ios-cmd { color: var(--cyan); }
+.ios-no { color: var(--pink); }
+.ios-if { color: var(--pink); }
+.ios-ip { color: var(--warning); }
+.ios-var,
+.ios-comment { color: var(--text-muted); font-style: italic; }
+
 .highlight,
 .code-block { margin: 1.5rem 0; }
 .code-block .highlight { margin: 0; }

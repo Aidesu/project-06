@@ -19,22 +19,22 @@ SSH (Secure Shell) permet d'administrer un équipement à distance via une conne
 ## Configuration
 
 Changer le nom de l'équipement :
-```bash
+```cisco
 hostname [NAME]
 ```
 
 Créer un utilisateur local :
-```bash
+```cisco
 username [USERNAME] secret [PWD]
 ```
 
 Définir un nom de domaine :
-```bash
+```cisco
 ip domain-name [DOMAIN]
 ```
 
 Générer les clés RSA et forcer SSH v2 :
-```bash
+```cisco
 crypto key generate rsa general-keys modulus 1024
 ip ssh version 2
 ```
@@ -43,7 +43,7 @@ ip ssh version 2
 > Le `hostname` et le `ip domain-name` sont obligatoires : sans eux, la génération des clés RSA échoue.
 
 Autoriser SSH sur les lignes VTY :
-```bash {copy=true}
+```cisco {copy=true}
 line vty 0 15
 login local
 transport input ssh

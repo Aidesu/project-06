@@ -27,22 +27,22 @@ Un switch est un équipement réseau qui relie plusieurs appareils entre eux afi
 ## Commandes de base
 
 Passer en mode privilégié :
-```bash {copy=true}
+```cisco {copy=true}
 enable
 ```
 
 Passer en mode configuration :
-```bash {copy=true}
+```cisco {copy=true}
 configure terminal
 ```
 
 Changer le nom du switch :
-```bash
+```cisco
 hostname [NAME]
 ```
 
 Désactiver la résolution DNS :
-```bash {copy=true}
+```cisco {copy=true}
 no ip domain-lookup
 ```
 
@@ -50,12 +50,12 @@ no ip domain-lookup
 > Évite d'attendre de longues secondes quand une commande mal tapée est interprétée comme un nom d'hôte.
 
 Quitter le mode actuel :
-```bash {copy=true}
+```cisco {copy=true}
 exit
 ```
 
 Revenir directement au mode privilégié :
-```bash {copy=true}
+```cisco {copy=true}
 end
 ```
 
@@ -64,37 +64,37 @@ end
 ## Interfaces
 
 Afficher les interfaces :
-```bash {copy=true}
+```cisco {copy=true}
 show ip interface brief
 ```
 
 Sélectionner une interface :
-```bash
+```cisco
 interface f0/1
 ```
 
 Sélectionner plusieurs interfaces :
-```bash
+```cisco
 interface range f0/1-16
 ```
 
 Activer une interface :
-```bash {copy=true}
+```cisco {copy=true}
 no shutdown
 ```
 
 Désactiver une interface :
-```bash {copy=true}
+```cisco {copy=true}
 shutdown
 ```
 
 Ajouter une description :
-```bash
+```cisco
 description [DESCRIPTION]
 ```
 
 Afficher l'état des interfaces :
-```bash {copy=true}
+```cisco {copy=true}
 show interfaces status
 ```
 
@@ -110,25 +110,25 @@ show interfaces status
 Les VLANs permettent de diviser un réseau physique en plusieurs réseaux logiques indépendants afin de mieux organiser et sécuriser les communications.
 
 Créer un VLAN :
-```bash
+```cisco
 vlan 10
 name MY_VLAN
 ```
 
 Afficher les VLANs :
-```bash {copy=true}
+```cisco {copy=true}
 show vlan brief
 ```
 
 Affecter une interface à un VLAN :
-```bash
+```cisco
 interface f0/1
 switchport mode access
 switchport access vlan 10
 ```
 
 Affecter une range d'interfaces à un VLAN :
-```bash
+```cisco
 interface range f0/1-16
 switchport mode access
 switchport access vlan 10
@@ -141,13 +141,13 @@ switchport access vlan 10
 Un trunk transporte plusieurs VLANs sur un seul lien, généralement entre deux switchs ou vers un routeur.
 
 Passer une interface en trunk :
-```bash
+```cisco
 interface g0/1
 switchport mode trunk
 ```
 
 Afficher les trunks :
-```bash {copy=true}
+```cisco {copy=true}
 show interfaces trunk
 ```
 
@@ -159,14 +159,14 @@ show interfaces trunk
 ## IP de management
 
 Configurer une IP sur le VLAN de management :
-```bash
+```cisco
 interface vlan 1
 ip address 192.168.1.2 255.255.255.0
 no shutdown
 ```
 
 Configurer la gateway :
-```bash
+```cisco
 ip default-gateway 192.168.1.1
 ```
 
@@ -191,12 +191,12 @@ ip default-gateway 192.168.1.1
 ## Sauvegarde
 
 Sauvegarder la configuration :
-```bash {copy=true}
+```cisco {copy=true}
 copy running-config startup-config
 ```
 
 Alternative :
-```bash {copy=true}
+```cisco {copy=true}
 write memory
 ```
 
