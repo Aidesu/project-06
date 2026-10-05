@@ -2,7 +2,7 @@
 title: "SVI"
 date: 2026-10-01T11:00:00+02:00
 draft: false
-description: "Configurer une SVI (Switched Virtual Interface) pour donner une IP de management à un switch Cisco."
+description: "Donner une IP de management à un switch Cisco."
 tags: ["cisco", "switch", "vlan", "réseau"]
 categories: ["réseau"]
 ---

@@ -2,7 +2,7 @@
 title: "Switch"
 date: 2026-10-02T14:05:21+02:00
 draft: false
-description: "Aide-mémoire des commandes Cisco IOS pour configurer un switch : interfaces, VLAN, trunk, management et sauvegarde."
+description: "Commandes de base d'un switch Cisco : VLAN, trunk, sauvegarde."
 tags: ["cisco", "switch", "vlan", "réseau"]
 categories: ["réseau"]
 ---

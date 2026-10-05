@@ -17,6 +17,10 @@
   {{ partial "footer.html" . }}
   {{ $js := resources.Get "js/copy-code.js" | minify | fingerprint }}
   <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
+  {{ if not $full }}
+    {{ $sidebar := resources.Get "js/sidebar.js" | minify | fingerprint }}
+    <script src="{{ $sidebar.RelPermalink }}" integrity="{{ $sidebar.Data.Integrity }}"></script>
+  {{ end }}
   {{ $search := resources.Get "js/search.js" | minify | fingerprint }}
   <script src="{{ $search.RelPermalink }}" integrity="{{ $search.Data.Integrity }}"></script>
   {{- /* Mermaid (~5 Mo) chargé uniquement sur les pages contenant un bloc ```mermaid */}}

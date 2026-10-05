@@ -2,7 +2,7 @@
 title: "Mermaid"
 date: 2026-10-01
 draft: false
-description: "Dessiner des schémas d'architecture as code avec des blocs Mermaid."
+description: "Schémas d'architecture as code avec Mermaid."
 tags: ["mermaid", "docs-as-code", "ci-cd"]
 categories: ["outils"]
 ---

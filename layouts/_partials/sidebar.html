@@ -1,24 +1,32 @@
 {{ $current := . }}
 <nav class="sidebar" aria-label="Navigation du wiki">
-  {{ with site.Home.RegularPages.ByTitle }}
-    <p class="sidebar-title">Pages</p>
-    <ul>
-      {{ range . }}
-        <li><a href="{{ .RelPermalink }}"{{ if $current.Eq . }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a></li>
-      {{ end }}
-    </ul>
-  {{ end }}
-  {{ range site.Home.Sections.ByWeight }}
-    {{- /* Masquées : sections du footer (sauf si on y est) et sections sans article */}}
-    {{ if or (and (not .Params.footer) .RegularPagesRecursive) ($current.IsDescendant .) ($current.Eq .) }}
-    <p class="sidebar-title"><a href="{{ .RelPermalink }}"{{ if $current.Eq . }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a></p>
-    {{ with .RegularPages.ByTitle }}
+  {{- /* Poignée de repli (cf. sidebar.js) ; masquée sans JS, la liste reste alors affichée */}}
+  <button class="sidebar-toggle" type="button" aria-controls="sidebar-panel" aria-expanded="true" aria-label="Masquer la navigation" title="Masquer la navigation">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <path d="m9 6 6 6-6 6"/>
+    </svg>
+  </button>
+  <div class="sidebar-panel" id="sidebar-panel">
+    {{ with site.Home.RegularPages.ByTitle }}
+      <p class="sidebar-title">Pages</p>
       <ul>
         {{ range . }}
           <li><a href="{{ .RelPermalink }}"{{ if $current.Eq . }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a></li>
         {{ end }}
       </ul>
     {{ end }}
+    {{ range site.Home.Sections.ByWeight }}
+      {{- /* Masquées : sections du footer (sauf si on y est) et sections sans article */}}
+      {{ if or (and (not .Params.footer) .RegularPagesRecursive) ($current.IsDescendant .) ($current.Eq .) }}
+      <p class="sidebar-title"><a href="{{ .RelPermalink }}"{{ if $current.Eq . }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a></p>
+      {{ with .RegularPages.ByTitle }}
+        <ul>
+          {{ range . }}
+            <li><a href="{{ .RelPermalink }}"{{ if $current.Eq . }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a></li>
+          {{ end }}
+        </ul>
+      {{ end }}
+      {{ end }}
     {{ end }}
-  {{ end }}
+  </div>
 </nav>

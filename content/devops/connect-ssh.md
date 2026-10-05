@@ -2,7 +2,7 @@
 title: "Connect SSH"
 date: 2026-10-01T11:03:26+02:00
 draft: false
-description: "Activer l'accès SSH sur un switch ou routeur Cisco : utilisateur local, clés RSA et lignes VTY."
+description: "Activer SSH sur un switch ou routeur Cisco."
 tags: ["cisco", "ssh", "sécurité", "réseau"]
 categories: ["réseau"]
 ---

@@ -145,7 +145,7 @@ img { max-width: 100%; height: auto; }
 /* ---------- Verre (panneaux translucides) ---------- */
 
 .site-header,
-.sidebar,
+.sidebar-panel,
 .has-toc .toc,
 .search-input,
 .search-results,
@@ -434,6 +434,7 @@ body:has(.layout--full)::after {
   max-width: var(--page-width);
   min-height: calc(100vh - 8rem);
   margin-inline: auto;
+  transition: grid-template-columns 0.35s var(--ease-out);
 }
 
 .content {
@@ -448,20 +449,98 @@ body:has(.layout--full)::after {
 
 /* ---------- Sidebar (panneau de verre flottant) ---------- */
 
+/* .sidebar positionne ; .sidebar-panel porte le verre et défile (sans clipper la poignée) */
 .sidebar {
   position: sticky;
   top: calc(var(--header-height) + 1rem);
+  z-index: 1; /* poignée au-dessus du contenu */
   align-self: start;
+  width: calc(var(--sidebar-width) - var(--gutter));
+  margin: 1rem 0 1rem var(--gutter);
+  view-transition-name: sidebar;
+  animation: fade-up 0.5s var(--ease-out) backwards;
+}
+
+.sidebar-panel {
   max-height: calc(100vh - var(--header-height) - 2rem);
   overflow-y: auto;
-  margin: 1rem 0 1rem var(--gutter);
   padding: 1.25rem 0.75rem;
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--glass-shine), var(--glass-shadow);
   font-size: 0.9375rem;
-  view-transition-name: sidebar;
-  animation: fade-up 0.5s var(--ease-out) backwards;
+}
+
+/* Poignée de tiroir accrochée au bord droit de la liste (cf. sidebar.js) */
+.sidebar-toggle {
+  position: absolute;
+  top: 1rem;
+  left: 100%;
+  display: none;
+  place-items: center;
+  width: 1.5rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--glass-border);
+  border-left: 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  /* Pas de backdrop-filter : le parent flouté en ferait une "backdrop root" (flou vide) */
+  background: var(--glass-bg-strong);
+  box-shadow: var(--glass-shine);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    opacity 0.25s ease,
+    translate 0.35s var(--ease-spring),
+    width 0.3s var(--ease-out),
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+.js .sidebar-toggle { display: grid; } /* sans JS : pas de poignée, liste toujours affichée */
+
+.sidebar-toggle:hover,
+.sidebar-toggle:focus-visible {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--glass-bg-strong), var(--glass-bg-strong)) padding-box,
+    var(--accent-gradient) border-box;
+  color: var(--pink);
+}
+
+.sidebar-toggle svg {
+  width: 1rem;
+  height: 1rem;
+  transition: rotate 0.35s var(--ease-out), opacity 0.2s ease;
+}
+.sidebar-toggle[aria-expanded="true"] svg { rotate: 180deg; }
+
+/* Souris : poignée cachée derrière la liste, elle glisse au survol (ou au focus clavier).
+   Repliée, il ne reste qu'un trait dégradé qui s'élargit en languette au survol. */
+@media (hover: hover) {
+  .sidebar-toggle[aria-expanded="true"] {
+    opacity: 0;
+    translate: -100% 0;
+  }
+  .sidebar:hover .sidebar-toggle,
+  .sidebar:focus-within .sidebar-toggle {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .sidebar-toggle[aria-expanded="false"]:not(:hover, :focus-visible) {
+    width: 0.25rem;
+    border-color: transparent;
+    background: var(--accent-gradient);
+    opacity: 0.45;
+  }
+  .sidebar-toggle[aria-expanded="false"]:not(:hover, :focus-visible) svg { opacity: 0; }
+
+  /* Zone de survol plus large que le trait visible */
+  .sidebar-toggle::before {
+    content: "";
+    position: absolute;
+    inset: -0.75rem -1rem -0.75rem 0;
+  }
 }
 
 .sidebar ul {
@@ -522,6 +601,23 @@ body:has(.layout--full)::after {
 
 .sidebar li a:hover::before,
 .sidebar li a[aria-current="page"]::before { transform: scaleY(1); }
+
+/* Repliée (grand écran, cf. sidebar.js) : la colonne se referme, la liste glisse hors champ
+   en laissant sa poignée au bord gauche ; le contenu se recentre */
+@media (min-width: 48.0625rem) {
+  .sidebar { transition: translate 0.35s var(--ease-out); }
+  .sidebar-panel { transition: opacity 0.25s ease, visibility 0s; }
+
+  .sidebar-collapsed .layout:not(.layout--full) { grid-template-columns: 0 minmax(0, 1fr); }
+
+  .sidebar-collapsed .sidebar { translate: calc(-100% - var(--gutter)) 0; }
+
+  .sidebar-collapsed .sidebar-panel {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease, visibility 0s 0.35s;
+  }
+}
 
 /* ---------- Typographie ---------- */
 
@@ -1629,8 +1725,42 @@ html:has(.editor) { scroll-padding-top: var(--editor-sticky); }
   .layout { grid-template-columns: 1fr; }
   .sidebar {
     position: static;
-    max-height: none;
+    width: auto;
     margin: 1rem var(--gutter) 0;
+  }
+  .sidebar-panel { max-height: none; }
+
+  /* Avec JS : tiroir par-dessus le contenu, fermé par défaut, poignée au bord gauche (cf. sidebar.js) */
+  .js .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 29; /* sous le header */
+    width: min(18rem, 85vw);
+    margin: 0;
+    translate: -100% 0;
+    animation: none;
+    transition: translate 0.35s var(--ease-out);
+  }
+
+  .js .sidebar-toggle { top: calc(var(--header-height) + 1rem); }
+
+  .js .sidebar-panel {
+    height: 100%;
+    max-height: none;
+    padding-top: calc(var(--header-height) + 1rem);
+    border-width: 0 1px 0 0;
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    background: var(--glass-bg-strong);
+    visibility: hidden;
+    transition: visibility 0s 0.35s, box-shadow 0.35s ease;
+  }
+
+  .sidebar-open .sidebar { translate: 0 0; }
+
+  .sidebar-open .sidebar-panel {
+    visibility: visible;
+    box-shadow: var(--glass-shine), 0 0 0 100vmax rgb(0 0 0 / 0.5);
+    transition: visibility 0s, box-shadow 0.35s ease;
   }
 }
 

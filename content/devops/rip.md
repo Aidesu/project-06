@@ -2,7 +2,7 @@
 title: "RIP"
 date: 2026-10-01T11:28:01+02:00
 draft: false
-description: "Configurer le routage dynamique RIP v2 sur un routeur Cisco : réseaux annoncés, redistribution et route par défaut."
+description: "Routage dynamique RIP v2 sur routeur Cisco."
 tags: ["cisco", "routage", "rip", "réseau"]
 categories: ["réseau"]
 ---

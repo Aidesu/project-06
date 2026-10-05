@@ -2,7 +2,7 @@
 title: "Hugo"
 date: 2026-10-01
 draft: false
-description: "Les commandes Hugo essentielles pour faire vivre ce wiki."
+description: "Commandes Hugo essentielles."
 tags: ["hugo", "docs-as-code"]
 categories: ["outils"]
 ---

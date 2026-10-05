@@ -2,7 +2,7 @@
 title: "Liens"
 date: 2026-10-01
 draft: false
-description: "Relier les pages du wiki avec la syntaxe [[lien]] d'Obsidian."
+description: "Lier les pages avec [[lien]]."
 tags: ["docs-as-code", "markdown"]
 categories: ["outils"]
 ---

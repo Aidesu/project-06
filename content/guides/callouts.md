@@ -2,7 +2,7 @@
 title: "Callouts"
 date: 2026-10-01
 draft: false
-description: "Mettre en valeur notes, astuces, avertissements et erreurs."
+description: "Encadrés Note, Tip, Warning, Error."
 tags: ["docs-as-code", "markdown"]
 categories: ["outils"]
 ---
